@@ -1,0 +1,37 @@
+{
+    "name": "masterflash-ru/commerceml",
+    "description": "Модуль обмена с 1С",
+    "type": "Service",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "masterflash",
+        "simba"
+    ],
+    "homepage": "https://masterflash.ru/",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.0",
+        "masterflash-ru/ado": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mf\\CommerceML\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mf\\CommerceML\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev",
+            "dev-develop": "1.0-dev"
+        },
+        "zf": {
+            "component": "Mf\\CommerceML",
+            "config-provider": "masterflash-ru\\Mf\\CommerceML\\ConfigProvider"
+        }
+    }
+}
