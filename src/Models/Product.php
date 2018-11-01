@@ -35,6 +35,8 @@ class Product extends Model
      * @var int $quantity
      */
     public $quantity;
+    
+    public $sklad_quantity;
 
     /**
      * @var array $price
@@ -60,6 +62,8 @@ class Product extends Model
      * @var array $images
      */
     public $images = [];
+    
+    public $brend=[];
 
     /**
      * Class constructor.
@@ -114,6 +118,17 @@ class Product extends Model
             }
         }
 
+        if ($xml->Изготовитель) {
+            $id = (string)$xml->Изготовитель->Ид;
+            $value = (string)$xml->Изготовитель->Наименование;
+
+            if ($value) {
+                $this->brend["id"] = $id;
+                $this->brend["value"] = $value;
+            }
+        }
+
+        
         if ($xml->Картинка) {
             $weight = 0;
             foreach ($xml->Картинка as $image) {
@@ -150,7 +165,6 @@ class Product extends Model
         if ($xml->Количество) {
             $this->quantity = (int)$xml->Количество;
         }
-
         if ($xml->Цены) {
             foreach ($xml->Цены->Цена as $price) {
                 $id = (string)$price->ИдТипаЦены;
@@ -161,6 +175,14 @@ class Product extends Model
                     'value' => (float)$price->ЦенаЗаЕдиницу
                 ];
             }
+        }
+        //распределение по складам
+        if ($xml->Склад){
+            foreach ($xml->Склад as $sklad){
+                $attr=$sklad->attributes();
+                $this->sklad_quantity[(string)$attr->ИдСклада]=(int)$attr->КоличествоНаСкладе;
+            }
+            
         }
     }
 }

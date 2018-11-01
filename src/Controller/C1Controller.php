@@ -67,9 +67,13 @@ public function indexAction()
         }
         if (false!==stripos($filename, "import")){
             $this->EventManager->trigger("catalogImport",NULL,["filename"=>$this->tmp.$filename]);
+            unlink($this->tmp.$filename);
         }
         if (false!==stripos($filename, "offers")){
             $this->EventManager->trigger("catalogOffers",NULL,["filename"=>$this->tmp.$filename]);
+            unlink($this->tmp.$filename);
+            //вызывается общее событие после завершения загрузки во временные хранилища
+            $this->EventManager->trigger("catalogImportComplete");
         }
 		return $view;
 	}

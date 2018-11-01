@@ -15,21 +15,6 @@
 
 
 
-Загрузка с отключеным фото
-"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
-"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
-"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
-"POST /1c?type=catalog&mode=file&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
-
-отличается наличием этого запроса:
-"GET /1c?type=catalog&mode=import&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
-"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
-"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
-"POST /1c?type=catalog&mode=file&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
-"GET /1c?type=catalog&mode=import&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
-
-
-
 Загрузка с включением фото и других файлов + включена опция zip=yes (на сайте)
 протокол не зависит от наличия картинок
 "GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"

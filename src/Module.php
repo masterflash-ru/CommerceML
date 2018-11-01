@@ -27,9 +27,9 @@ public function onBootstrap(MvcEvent $event)
         $eventManager = $event->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
         // объявление слушателя для обработки 
-        $sharedEventManager->attach("simba.1c", "catalogImport", [$this, 'catalogImport']);
-        $sharedEventManager->attach("simba.1c", "catalogOffers", [$this, 'catalogOffers']);
-        $sharedEventManager->attach("simba.1c", "catalogTruncate", [$this, 'catalogTruncate']);
+        $sharedEventManager->attach("simba.1c", "catalogImport", [$this, 'catalogImport'],100);
+        $sharedEventManager->attach("simba.1c", "catalogOffers", [$this, 'catalogOffers'],100);
+        $sharedEventManager->attach("simba.1c", "catalogTruncate", [$this, 'catalogTruncate'],100);
     }
     
 }

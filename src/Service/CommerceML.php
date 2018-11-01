@@ -5,6 +5,7 @@ namespace Mf\CommerceML\Service;
 use Mf\CommerceML\Models\Property;
 use Mf\CommerceML\Models\Category;
 use Mf\CommerceML\Models\PriceType;
+use Mf\CommerceML\Models\SkladType;
 use Mf\CommerceML\Models\Product;
 use Exception as CommerceMLException;
 
@@ -66,20 +67,9 @@ class CommerceML
      * @var array
      */
     protected $priceTypes = [];
+    
+    protected $skladTypes = [];
 
-    /**
-     * Class constructor.
-     *
-     * @param string $import Path to import.xml.
-     * @param string $offers Path to offers.xml.
-     * /
-    public function __construct($import, $offers)
-    {
-        $this->importXml = $this->loadXml($import);
-        $this->offersXml = $this->loadXml($offers);
-
-        $this->parse();
-    }
 
     /**
      * Load XML from file.
@@ -121,25 +111,6 @@ public function loadimportXml($f)
 }
    
     
-    
-    
-    /**
-     * Parsing xml files.
-     *
-     * @return void
-     */
-    public function parse()
-    {
-        $this->parseImportTime();
-        $this->parseOnlyChanges();
-
-        $this->parseCategories();
-        $this->parseProperties();
-
-        $this->parsePriceTypes();
-
-        $this->parseProducts();
-    }
 
     /**
      * Parse import time.
@@ -238,6 +209,17 @@ public function loadimportXml($f)
         }
     }
 
+    public function parseSkladTypes()
+    {
+        if ($this->offersXml->ПакетПредложений->Склады) {
+            foreach ($this->offersXml->ПакетПредложений->Склады->Склад as $xmlSkladType) {
+                $skladType = new SkladType($xmlSkladType);
+                $this->skladTypes[$skladType->id] = $skladType;
+            }
+        }
+    }
+
+    
     /**
      * Parse products.
      */
@@ -248,10 +230,8 @@ public function loadimportXml($f)
         ];
 
         $products = $this->importXml->Каталог->Товары;
-        //$offers = $this->offersXml->ПакетПредложений->Предложения;
 
         if (!$products) throw new CommerceMLException('Products not found.');
-        //if (!$offers) throw new CommerceMLException('Offers not found.');
 
         // Parse products in import.xml.
         foreach ($products->Товар as $product) {
@@ -259,18 +239,11 @@ public function loadimportXml($f)
             $buffer['products'][$productId]['import'] = $product;
         }
 
-       /* // Parse offers in offers.xml.
-        foreach ($offers->Предложение as $offer) {
-            $productId = (string)$offer->Ид;
-            $buffer['products'][$productId]['offer'] = $offer;
-        }*/
-
         // Merge import and offer to one product.
         foreach ($buffer['products'] as $item) {
             $import = isset($item['import']) ? $item['import'] : null;
-            $offer = isset($item['offer']) ? $item['offer'] : null;
 
-            if (is_null($import) /*|| is_null($offer)*/) {
+            if (is_null($import)) {
                 continue;
             }
 
@@ -297,18 +270,10 @@ public function loadimportXml($f)
             'products' => []
         ];
 
-        //$products = $this->importXml->Каталог->Товары;
         $import=null;
         $offers = $this->offersXml->ПакетПредложений->Предложения;
 
-        //if (!$products) throw new CommerceMLException('Products not found.');
         if (!$offers) throw new CommerceMLException('Offers not found.');
-
-        // Parse products in import.xml.
-       /* foreach ($products->Товар as $product) {
-            $productId = (string)$product->Ид;
-            $buffer['products'][$productId]['import'] = $product;
-        }*/
 
         // Parse offers in offers.xml.
         foreach ($offers->Предложение as $offer) {
@@ -318,10 +283,9 @@ public function loadimportXml($f)
 
         // Merge import and offer to one product.
         foreach ($buffer['products'] as $item) {
-            //$import = isset($item['import']) ? $item['import'] : null;
             $offer = isset($item['offer']) ? $item['offer'] : null;
 
-            if (/*is_null($import) ||*/is_null($offer)) {
+            if (is_null($offer)) {
                 continue;
             }
 
@@ -404,6 +368,12 @@ public function loadimportXml($f)
     {
         return $this->priceTypes;
     }
+
+    public function getSkladTypes()
+    {
+        return $this->skladTypes;
+    }
+
 
     /**
      * Get products.

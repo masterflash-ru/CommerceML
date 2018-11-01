@@ -5,14 +5,16 @@
     "license": "BSD-3-Clause",
     "keywords": [
         "masterflash",
-        "simba"
+        "simba",
+        "CommerceML"
     ],
     "homepage": "https://masterflash.ru/",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": "^7.0",
-        "masterflash-ru/ado": "*"
+        "masterflash-ru/ado": "^1.0",
+        "zendframework/zend-mvc": "^3.0.1"
     },
     "autoload": {
         "psr-4": {

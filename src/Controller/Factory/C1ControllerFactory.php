@@ -10,14 +10,12 @@ use Zend\EventManager\EventManager;
  */
 class C1ControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {
-		$config = $container->get('Config');
-	   $SharedEventManager=$container->get('SharedEventManager');
+public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+{
+	$config = $container->get('Config');
+    $SharedEventManager=$container->get('SharedEventManager');
 	$EventManager=new EventManager($SharedEventManager);
 	$EventManager->addIdentifiers(["simba.1c"]);
-
-		return new $requestedName($config,$EventManager);
-    }
+	return new $requestedName($config,$EventManager);
 }
-
+}
