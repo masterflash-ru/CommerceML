@@ -50,9 +50,13 @@ return [
     ],
     'service_manager' => [
             'factories' => [//сервисы-фабрики
-                Service\Parser::class => Service\Factory\ParserFactory::class,
+                Service\catalogImport::class => Service\Factory\catalogImport::class,
+                Service\catalogOffers::class => Service\Factory\catalogOffers::class,
+                Service\catalogTruncate::class => Service\Factory\catalogTruncate::class,
             ],
         ],
+    
+   
     
     
     /*ID типа цены которую мы обрабатываем*/
@@ -60,5 +64,7 @@ return [
     //логин/пароль для базовой аутентификации 1С
     "1c"=>[
         "admin"=>"vfibyf",
+        "temp1c"=>__DIR__."/../../../../data/1c/",
+        "standartParser"=>true,
     ],
 ];

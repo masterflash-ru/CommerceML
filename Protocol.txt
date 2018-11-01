@@ -1,0 +1,47 @@
+Загрузка с включением фото и других файлов
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import_files/5c/5c44ee68dc1711e8960e001c4252ed46_5c44ee69dc1711e8960e001c4252ed46.jpg HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import_files/5c/5c44ee68dc1711e8960e001c4252ed46_5c44ee6adc1711e8960e001c4252ed46.jpg HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import_files/5c/5c44ee6bdc1711e8960e001c4252ed46_5c44ee6cdc1711e8960e001c4252ed46.jpg HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import_files/94/9461d071dc4311e88093001c4252ed46_9461d072dc4311e88093001c4252ed46.jpg HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=import&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=import&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+
+
+
+Загрузка с отключеным фото
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+
+отличается наличием этого запроса:
+"GET /1c?type=catalog&mode=import&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 39 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=import&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+
+
+
+Загрузка с включением фото и других файлов + включена опция zip=yes (на сайте)
+протокол не зависит от наличия картинок
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 40 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=v8_1065_3a.zip HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=import&filename=import0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=checkauth HTTP/1.1" 200 30 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=init HTTP/1.1" 200 40 "-" "1C+Enterprise/8.3" "-"
+"POST /1c?type=catalog&mode=file&filename=v8_1065_3f.zip HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+"GET /1c?type=catalog&mode=import&filename=offers0_1.xml HTTP/1.1" 200 18 "-" "1C+Enterprise/8.3" "-"
+
+
+
+

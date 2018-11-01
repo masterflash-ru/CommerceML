@@ -9,18 +9,22 @@ namespace Mf\CommerceML\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use ArtemsWay\CommerceML\CommerceML;
+use Mf\CommerceML\CommerceML;
 
 class IndexController extends AbstractActionController
 {
 
-public function __construct($parser)
+public function __construct($parser=0)
 {
     $this->parser=$parser;
 }
 
     public function indexAction()
     {
+        
+        \Zend\Debug\Debug::dump(class_exists("ZipArchive"));
+        return [];
+        
         
         $import=realpath(__DIR__."/../../../../data/1c/import0_1.xml");
         $offers=realpath(__DIR__."/../../../../data/1c/offers.xml");
