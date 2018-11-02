@@ -78,12 +78,10 @@ DROP TABLE IF EXISTS `import_1c_file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `import_1c_file` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `import_1c_tovar` char(127) DEFAULT NULL COMMENT 'ID товара в терминах 1C',
+  `import_1c_tovar` char(127) NOT NULL COMMENT 'ID товара в терминах 1C',
   `file` varchar(1000) DEFAULT NULL COMMENT 'сам файл+ путь',
   `weight` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `import_1c_tovar` (`import_1c_tovar`)
+  PRIMARY KEY (`import_1c_tovar`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='файлы к товару';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,4 +260,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-02 13:02:37
+-- Dump completed on 2018-11-02 19:20:36
