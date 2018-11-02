@@ -210,11 +210,13 @@ public function Import()
         
         //сопутствующие файлы
         foreach ($item->images as $images) {
+            if (!empty(trim($images["path"]))){
             $rsf->AddNew();
             $rsf->Fields->Item["file"]->Value=$dir.$images["path"];
             $rsf->Fields->Item["weight"]->Value=$images["weight"];
             $rsf->Fields->Item["import_1c_tovar"]->Value=$tovar_1c_id; //id товара в терминах 1С
             $rsf->Update();
+            }
         }
         
     }
