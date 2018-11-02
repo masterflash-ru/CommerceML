@@ -44,8 +44,8 @@ public function Import()
     
     $this->connection->Execute("update import_1c_price_type set flag_change=0",$a,adExecuteNoRecords);
     $this->connection->Execute("update import_1c_sklad_type set flag_change=0",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_price",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_sklad",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_price",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_sklad",$a,adExecuteNoRecords);
     
     //типы прайсов
     $exists=[];

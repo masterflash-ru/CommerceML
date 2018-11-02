@@ -34,7 +34,7 @@ return [
                 Service\catalogOffers::class => Service\Factory\catalogOffers::class,
                 Service\catalogTruncate::class => Service\Factory\catalogTruncate::class,
             ],
-        ],
+    ],
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',

@@ -27,6 +27,7 @@ public function indexAction()
 {
 	$view=new ViewModel();
 	$view->setTerminal(true);
+    set_time_limit(0);
 	
 	
 	if (!isset($_SERVER['PHP_AUTH_USER'])) {

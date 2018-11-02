@@ -36,7 +36,7 @@ class Product extends Model
      */
     public $quantity;
     
-    public $sklad_quantity;
+    public $sklad_quantity=[];
 
     /**
      * @var array $price

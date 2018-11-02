@@ -136,6 +136,8 @@ public function Import()
                 ];
         }
     }
+    $rs->Close();
+    $rs=null;
     //импорт самого товара
    /*
    структура записи товара
@@ -177,8 +179,12 @@ public function Import()
     $products=$reader->getProducts();
     $rs=new RecordSet();
     $rs->CursorType = adOpenKeyset;
-    $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_tovar",$this->connection);
+    
+    $rsf=new RecordSet();
+    $rsf->CursorType = adOpenKeyset;
+    $rsf->Open("select * from import_1c_file",$this->connection);
+
     foreach ($products as $tovar_1c_id=>$item){
         if (!isset($exists[$item->category][0]) || !$item->name){
             continue;
@@ -193,6 +199,7 @@ public function Import()
         $rs->AddNew();
         $rs->Fields->Item["import_1c_category"]->Value=$exists[$item->category][0];
         $rs->Fields->Item["name"]->Value=$item->name;
+        $rs->Fields->Item["category"]->Value=$item->category;
         $rs->Fields->Item["sku"]->Value=$item->sku;
         $rs->Fields->Item["description"]->Value=$item->description;
         $rs->Fields->Item["id1c"]->Value=$tovar_1c_id;
@@ -201,10 +208,6 @@ public function Import()
         $rs->Update();
         
         //сопутствующие файлы
-        $rsf=new RecordSet();
-        $rsf->CursorType = adOpenKeyset;
-        $rsf->MaxRecords=0;
-        $rsf->Open("select * from import_1c_file",$this->connection);
         foreach ($item->images as $images) {
             $rsf->AddNew();
             $rsf->Fields->Item["file"]->Value=$dir.$images["path"];
@@ -217,7 +220,6 @@ public function Import()
     //добавляем бренды, ечли есть
     $rsb=new RecordSet();
     $rsb->CursorType = adOpenKeyset;
-    $rsb->MaxRecords=0;
     $rsb->Open("select * from import_1c_brend",$this->connection);
     foreach ($brends as $id=>$name){
         $rsb->AddNew();
