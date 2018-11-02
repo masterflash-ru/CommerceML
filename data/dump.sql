@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.6.41, for FreeBSD11.1 (i386)
+-- MySQL dump 10.13  Distrib 5.6.41, for FreeBSD11.2 (i386)
 --
 -- Host: localhost    Database: gaz_krasnodar
 -- ------------------------------------------------------
@@ -15,18 +15,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
-
-DROP TABLE IF EXISTS `import_1c_scheme`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_1c_scheme` (
-  `parameter` char(255) NOT NULL COMMENT 'имя параметра',
-  `value` char(255) DEFAULT NULL COMMENT 'значение параметра',
-  PRIMARY KEY (`parameter`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='общая информация по схеме';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+--
+-- Table structure for table `import_1c_brend`
+--
 
 DROP TABLE IF EXISTS `import_1c_brend`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -116,7 +107,9 @@ CREATE TABLE `import_1c_price` (
   `id1c` char(127) NOT NULL COMMENT 'ID товара в 1С',
   `import_1c_price_type` char(127) DEFAULT NULL COMMENT 'ID типа прайса в 1С',
   `currency` char(3) DEFAULT NULL,
-  `price` decimal(11,2) DEFAULT NULL COMMENT 'сама цена'
+  `price` decimal(11,2) DEFAULT NULL COMMENT 'сама цена',
+  KEY `import_1c_price_type` (`import_1c_price_type`),
+  KEY `id1c` (`id1c`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='сами прайсы';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -208,7 +201,7 @@ DROP TABLE IF EXISTS `import_1c_tovar`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `import_1c_tovar` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `import_1c_category` int(11) DEFAULT NULL,
+  `import_1c_category` int(11) DEFAULT NULL COMMENT 'ID категории сайта (число)',
   `import_1c_brend` char(127) DEFAULT NULL COMMENT 'ID 1C производителя',
   `id1c` char(127) DEFAULT NULL,
   `name` char(255) DEFAULT NULL,
@@ -219,10 +212,12 @@ CREATE TABLE `import_1c_tovar` (
   `category` char(127) DEFAULT NULL,
   `requisites_print` text COMMENT 'Наименование для печати',
   `url` char(127) DEFAULT NULL,
+  `status` char(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `import_1c_category` (`import_1c_category`),
   KEY `1c` (`id1c`),
-  KEY `import_1c_brend` (`import_1c_brend`)
+  KEY `import_1c_brend` (`import_1c_brend`),
+  KEY `status` (`status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='сам каталог';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,6 +229,29 @@ LOCK TABLES `import_1c_tovar` WRITE;
 /*!40000 ALTER TABLE `import_1c_tovar` DISABLE KEYS */;
 /*!40000 ALTER TABLE `import_1c_tovar` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `import_1c_scheme`
+--
+
+DROP TABLE IF EXISTS `import_1c_scheme`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_scheme` (
+  `parameter` char(255) NOT NULL COMMENT 'имя параметра',
+  `value` char(255) DEFAULT NULL COMMENT 'значение параметра',
+  PRIMARY KEY (`parameter`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='общая информация по схеме';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `import_1c_scheme`
+--
+
+LOCK TABLES `import_1c_scheme` WRITE;
+/*!40000 ALTER TABLE `import_1c_scheme` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_scheme` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -244,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-01 18:56:34
+-- Dump completed on 2018-11-02 13:02:37

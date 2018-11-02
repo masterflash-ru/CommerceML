@@ -64,6 +64,7 @@ class Product extends Model
     public $images = [];
     
     public $brend=[];
+    public $status=0;
 
     /**
      * Class constructor.
@@ -98,6 +99,9 @@ class Product extends Model
     public function loadImport($xml)
     {
         $this->id = trim($xml->Ид);
+        
+        $attr=$xml->attributes();
+        $this->status=trim($attr->Статус);
 
         $this->name = trim($xml->Наименование);
         $this->description = trim($xml->Описание);

@@ -205,6 +205,7 @@ public function Import()
         $rs->Fields->Item["id1c"]->Value=$tovar_1c_id;
         $rs->Fields->Item["url"]->Value=$translit($item->name);
         $rs->Fields->Item["import_1c_brend"]->Value=$brend_id;
+        $rs->Fields->Item["status"]->Value=$item->status;
         $rs->Update();
         
         //сопутствующие файлы
