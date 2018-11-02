@@ -15,9 +15,18 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `import_1c_brend`
---
+
+
+DROP TABLE IF EXISTS `import_1c_scheme`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_scheme` (
+  `parameter` char(255) NOT NULL COMMENT 'имя параметра',
+  `value` char(255) DEFAULT NULL COMMENT 'значение параметра',
+  PRIMARY KEY (`parameter`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='общая информация по схеме';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 DROP TABLE IF EXISTS `import_1c_brend`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -80,7 +89,7 @@ DROP TABLE IF EXISTS `import_1c_file`;
 CREATE TABLE `import_1c_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `import_1c_tovar` char(127) DEFAULT NULL COMMENT 'ID товара в терминах 1C',
-  `file` char(255) DEFAULT NULL COMMENT 'сам файл+ путь',
+  `file` varchar(1000) DEFAULT NULL COMMENT 'сам файл+ путь',
   `weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `import_1c_tovar` (`import_1c_tovar`)

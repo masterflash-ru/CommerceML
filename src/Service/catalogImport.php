@@ -37,16 +37,37 @@ public function Import()
     $f=$this->filename;
     $reader->loadimportXml($f);
     
+    $reader->parseScheme();
     $reader->parseOnlyChanges();
     $reader->parseCategories();
     $onlyChange=$reader->getOnlyChanges();
     $categories=$reader->getCategories();
+    $scheme=$reader->getScheme();
     
     //если полная перезагрузка, чистим все во временных таблицах
     if (!$onlyChange){
         $this->EventManager->trigger("catalogTruncate");
     }
+    //обработка схемы файлов-общая информация
+    $a=0;
+    $this->connection->Execute("truncate import_1c_scheme",$a,adExecuteNoRecords);
     
+    $rss=new RecordSet();
+    $rss->CursorType = adOpenKeyset;
+    $rss->MaxRecords=0;
+    $rss->Open("select * from import_1c_scheme",$this->connection);
+
+    foreach ($scheme as $parameter=>$value){
+        if ($parameter!="id"){
+            $rss->AddNew();
+            $rss->Fields->Item["parameter"]->Value=$parameter;
+            $rss->Fields->Item["value"]->Value=$value;
+            $rss->Update();
+        }
+    }
+    $rss->Close();
+    $rss=null;
+
     //частичная / полная загрузка, проверяем на существование узлов
     //храним то что есть в нашей базе
     $exists=[];
@@ -65,7 +86,7 @@ public function Import()
     }
     //смотрим на предмет переименования категории
     foreach ($categories as $id_1c=>$item){
-        if ($item->name!=$exists[$id_1c][3]){
+        if (isset($exists[$id_1c]) && $item->name!=$exists[$id_1c][3]){
             //есть измнение!
             $rs->Find("id1c='{$id_1c}'");
             $rs->Fields->Item["name"]->Value=$item->name;
@@ -146,12 +167,13 @@ public function Import()
   }
 }*/
     $a=0;
-    $this->connection->Execute("delete from import_1c_tovar",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_brend",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_file",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_file",$a,adExecuteNoRecords);
     $brends=[];
     $reader->parseProducts();
 
+    $dir=rtrim($this->config["1c"]["temp1c"],"/")."/";
     $products=$reader->getProducts();
     $rs=new RecordSet();
     $rs->CursorType = adOpenKeyset;
@@ -161,6 +183,13 @@ public function Import()
         if (!isset($exists[$item->category][0]) || !$item->name){
             continue;
         }
+        $brend_id="";
+        //накапливаем бренды, позже занесем в базу
+        if (!empty($item->brend)){
+            $brends[(string)$item->brend["id"]]=(string)$item->brend["value"];
+            $brend_id=(string)$item->brend["id"];
+        }
+
         $rs->AddNew();
         $rs->Fields->Item["import_1c_category"]->Value=$exists[$item->category][0];
         $rs->Fields->Item["name"]->Value=$item->name;
@@ -168,6 +197,7 @@ public function Import()
         $rs->Fields->Item["description"]->Value=$item->description;
         $rs->Fields->Item["id1c"]->Value=$tovar_1c_id;
         $rs->Fields->Item["url"]->Value=$translit($item->name);
+        $rs->Fields->Item["import_1c_brend"]->Value=$brend_id;
         $rs->Update();
         
         //сопутствующие файлы
@@ -177,28 +207,24 @@ public function Import()
         $rsf->Open("select * from import_1c_file",$this->connection);
         foreach ($item->images as $images) {
             $rsf->AddNew();
-            $rsf->Fields->Item["file"]->Value=$images["path"];
+            $rsf->Fields->Item["file"]->Value=$dir.$images["path"];
             $rsf->Fields->Item["weight"]->Value=$images["weight"];
             $rsf->Fields->Item["import_1c_tovar"]->Value=$tovar_1c_id; //id товара в терминах 1С
             $rsf->Update();
         }
-        //накапливаем бренды, позже занесем в базу
-        if (!empty($item->brend)){
-            $brends[$item->brend["id"]]=$item->brend["value"];
-        }
         
     }
     //добавляем бренды, ечли есть
-    $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
-    $rs->MaxRecords=0;
-    $rs->Open("select * from import_1c_brend",$this->connection);
+    $rsb=new RecordSet();
+    $rsb->CursorType = adOpenKeyset;
+    $rsb->MaxRecords=0;
+    $rsb->Open("select * from import_1c_brend",$this->connection);
     foreach ($brends as $id=>$name){
-        $rs->AddNew();
-        $rs->Fields->Item["id1c"]->Value=$id;
-        $rs->Fields->Item["name"]->Value=$name;
-        $rs->Fields->Item["url"]->Value=$translit($name);
-        $rs->Update();
+        $rsb->AddNew();
+        $rsb->Fields->Item["id1c"]->Value=$id;
+        $rsb->Fields->Item["name"]->Value=$name;
+        $rsb->Fields->Item["url"]->Value=$translit($name);
+        $rsb->Update();
     }
 }
 	

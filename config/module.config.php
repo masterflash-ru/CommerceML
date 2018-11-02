@@ -35,7 +35,12 @@ return [
                 Service\catalogTruncate::class => Service\Factory\catalogTruncate::class,
             ],
         ],
-    
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
+        ],
+    ],
+
     
     "1c"=>[
         //логин/пароль для базовой аутентификации 1С

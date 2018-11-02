@@ -1,4 +1,11 @@
 <?php
+$zip=class_exists("ZipArchive");
+if ($zip){
+    $zip="yes\n";
+}
+else {
+    $zip="no\n";
+}
 //инициализация
-echo "zip=no\n";
-echo "file_limit=100000000\n";
+echo $zip;
+echo "file_limit=1000000000\n";

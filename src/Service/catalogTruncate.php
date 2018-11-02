@@ -1,9 +1,15 @@
 <?php
-namespace Mf\CommerceML\Service;
 
 /*
 *стандартный обработчик очистки каталога
 */
+
+namespace Mf\CommerceML\Service;
+
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FilesystemIterator;
+
 
 
 class catalogTruncate
@@ -25,26 +31,25 @@ public function __construct($connection,$config,$options)
 public function Import()
 {
     $a=0;
-    $this->connection->Execute("delete from import_1c_tovar",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_category",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_brend",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_price",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_price_type",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_sklad_type",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_sklad",$a,adExecuteNoRecords);
-    $this->connection->Execute("delete from import_1c_file",$a,adExecuteNoRecords);
-    //чистим все файлы и папки во временном хранилище
-    $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($this->config["1c"]["temp1c"]),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
+    $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_category",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_price",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_price_type",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_sklad_type",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_sklad",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_file",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_scheme",$a,adExecuteNoRecords);
+    
+    /*//чистим все файлы и папки во временном хранилище
+    $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator($this->config["1c"]["temp1c"],FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($iterator as $path) {
         if ($path->isDir()) {
-            if ($path!="." && $path!="..") {rmdir((string)$path);}
+            rmdir((string)$path);
         } else {
             unlink((string)$path);
         }
-    }
+    }*/
 
 }
 	

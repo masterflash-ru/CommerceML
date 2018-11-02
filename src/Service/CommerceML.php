@@ -7,6 +7,7 @@ use Mf\CommerceML\Models\Category;
 use Mf\CommerceML\Models\PriceType;
 use Mf\CommerceML\Models\SkladType;
 use Mf\CommerceML\Models\Product;
+use Mf\CommerceML\Models\Scheme;
 use Exception as CommerceMLException;
 
 class CommerceML
@@ -69,6 +70,7 @@ class CommerceML
     protected $priceTypes = [];
     
     protected $skladTypes = [];
+    protected $scheme=[];
 
 
     /**
@@ -112,12 +114,6 @@ public function loadimportXml($f)
    
     
 
-    /**
-     * Parse import time.
-     *
-     * @throws CommerceMLException
-     * @return void
-     */
     public function parseImportTime()
     {
         $importTime = $this->importXml['ДатаФормирования'];
@@ -219,6 +215,16 @@ public function loadimportXml($f)
         }
     }
 
+    /*
+    * парсер общей информации схемы
+    */
+    public function parseScheme()
+    {
+        $this->scheme = new Scheme($this->importXml);
+        $this->scheme=(array)$this->scheme;
+    }
+
+
     
     /**
      * Parse products.
@@ -247,7 +253,7 @@ public function loadimportXml($f)
                 continue;
             }
 
-            $product = new Product($import, $offer);
+            $product = new Product($import,null);
 
             $this->products[$product->id] = $product;
 
@@ -384,21 +390,9 @@ public function loadimportXml($f)
     {
         return $this->products;
     }
-
-    /**
-     * Get all parsed data.
-     *
-     * @return array
-     */
-    public function getData()
+    public function getScheme()
     {
-        return [
-            "importTime"  => $this->getImportTime(),
-            "onlyChanges" => $this->getOnlyChanges(),
-            "categories"  => $this->getCategories(),
-            "properties"  => $this->getProperties(),
-            "priceTypes"  => $this->getPriceTypes(),
-            "products"    => $this->getProducts(),
-        ];
+        return $this->scheme;
     }
+
 }
