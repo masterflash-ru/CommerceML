@@ -36,7 +36,7 @@ public function indexAction()
 		echo 'Ошибка авторизации';
 		exit;
 	} else {
-			if (!isset($this->config["1c"][$_SERVER['PHP_AUTH_USER']]) || $_SERVER['PHP_AUTH_PW']!=$this->config["1c"][$_SERVER['PHP_AUTH_USER']]){
+			if (!isset($this->config["1c"]["login"][$_SERVER['PHP_AUTH_USER']]) || $_SERVER['PHP_AUTH_PW']!=$this->config["1c"]["login"][$_SERVER['PHP_AUTH_USER']]){
 			echo 'Ошибка авторизации';
 			exit;
 		}

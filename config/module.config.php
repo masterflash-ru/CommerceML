@@ -44,7 +44,9 @@ return [
     
     "1c"=>[
         //логин/пароль для базовой аутентификации 1С
-        "admin"=>"vfibyf",
+        "login"=>[
+            "admin"=>"vfibyf",
+            ],
         "temp1c"=>__DIR__."/../../../../data/1c/",
         "standartParser"=>true,
     ],
