@@ -13,7 +13,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.0",
-        "masterflash-ru/ado": "^1.0",
+        "masterflash-ru/ado": "^2.0",
         "zendframework/zend-mvc": "^3.0.1"
     },
     "autoload": {
