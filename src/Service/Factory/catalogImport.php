@@ -12,7 +12,7 @@ class catalogImport
 
 public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
 {
-    $connection=$container->get('ADO\Connection');
+    $connection=$container->get('DefaultSystemDb');
     $config = $container->get('Config');
     $SharedEventManager=$container->get('SharedEventManager');
 	$EventManager=new EventManager($SharedEventManager);
