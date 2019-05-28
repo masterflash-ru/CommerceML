@@ -2,12 +2,12 @@
 
 namespace Mf\CommerceML\Service;
 
-use Mf\CommerceML\Models\Property;
-use Mf\CommerceML\Models\Category;
-use Mf\CommerceML\Models\PriceType;
-use Mf\CommerceML\Models\SkladType;
-use Mf\CommerceML\Models\Product;
-use Mf\CommerceML\Models\Scheme;
+use Mf\CommerceML\Models\Property;      //модель характеристик товара
+use Mf\CommerceML\Models\Category;      //категории
+use Mf\CommerceML\Models\PriceType;     //тип цен
+use Mf\CommerceML\Models\SkladType;     //склады
+use Mf\CommerceML\Models\Product;       //сам товар-номенклатура
+use Mf\CommerceML\Models\Scheme;        //схема файлов обмена
 use Exception as CommerceMLException;
 
 class CommerceML
@@ -69,8 +69,14 @@ class CommerceML
      */
     protected $priceTypes = [];
     
+    /*типы складов*/
     protected $skladTypes = [];
+    
+    /*информация о схеме обмена*/
     protected $scheme=[];
+    
+    /*список характеристик товара*/
+    protected $characteristics=[];
 
 
     /**
@@ -102,18 +108,29 @@ class CommerceML
         return $importXml;
     }
 
-public function loadimportXml($f)
-{
-    $this->importXml=$this->loadXml($f);
-}
+    /**
+    * начало импорта-обработки
+    * $f - имя файла типа import0_1.xml
+    */
+    public function loadimportXml($f)
+    {
+        $this->importXml=$this->loadXml($f);
+    }
 
- public function loadoffersXml($f)
-{
-    $this->offersXml=$this->loadXml($f);
-}
+    /**
+    * начало импорта-обработки
+    * $f - имя файла типа offers0_1.xml
+    */
+     public function loadoffersXml($f)
+    {
+        $this->offersXml=$this->loadXml($f);
+    }
    
     
 
+    /**
+    * чтение даты импорта
+    */
     public function parseImportTime()
     {
         $importTime = $this->importXml['ДатаФормирования'];
@@ -174,8 +191,11 @@ public function loadimportXml($f)
         }
     }
 
+    
+    
+    
     /**
-     * Parse properties.
+     * обработка справочника характеристик
      *
      * @return void
      */

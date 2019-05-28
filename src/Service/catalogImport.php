@@ -39,10 +39,12 @@ public function Import()
     
     $reader->parseScheme();
     $reader->parseOnlyChanges();
+    $reader->parseProperties(); //характеристики товара
     $reader->parseCategories();
     $onlyChange=$reader->getOnlyChanges();
     $categories=$reader->getCategories();
     $scheme=$reader->getScheme();
+    //\Zend\Debug\Debug::dump($reader->getProperties());
     
     //если полная перезагрузка, чистим все во временных таблицах
     if (!$onlyChange){

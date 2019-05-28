@@ -1,5 +1,7 @@
 <?php
-
+/*
+* содержит характристики товара
+*/
 namespace Mf\CommerceML\Models;
 
 use Exception as CommerceMLException;
@@ -24,7 +26,7 @@ class Property
     /**
      * @var array $values
      */
-    public $values = array();
+    public $values = [];
 
     /**
      * @param \SimpleXMLElement $importXml
@@ -47,7 +49,7 @@ class Property
         $this->name = (string)$xml->Наименование;
 
         $this->type = $this->getType((string)$xml->ТипЗначений);
-
+        //смотрим варианты значений, если есть
         if ($this->type === 'voc' && $xml->ВариантыЗначений) {
             foreach ($xml->ВариантыЗначений->Справочник as $value) {
                 $id = (string)$value->ИдЗначения;
