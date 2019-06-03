@@ -44,15 +44,20 @@ public function Import()
     $onlyChange=$reader->getOnlyChanges();
     $categories=$reader->getCategories();
     $scheme=$reader->getScheme();
-    //\Zend\Debug\Debug::dump($reader->getProperties());
+    $properties=$reader->getProperties();
     
     //если полная перезагрузка, чистим все во временных таблицах
     if (!$onlyChange){
         $this->EventManager->trigger("catalogTruncate");
     }
+    /*-------------------------------------------------------------*/
     //обработка схемы файлов-общая информация
     $a=0;
     $this->connection->Execute("truncate import_1c_scheme",$a,adExecuteNoRecords);
+    /*характистики всега только полная замена*/
+    $this->connection->Execute("truncate import_1c_properties",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_properties_list",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_tovar_properties",$a,adExecuteNoRecords);
     
     $rss=new RecordSet();
     $rss->CursorType = adOpenKeyset;
@@ -70,6 +75,45 @@ public function Import()
     $rss->Close();
     $rss=null;
 
+    /*-------------------------------------------------------------*/
+    //обрабатываем характеристики товара, справочник указан в начале 
+    $rs=new RecordSet();
+    $rs->CursorType = adOpenKeyset;
+    $rs->MaxRecords=0;
+    $rs->Open("select * from import_1c_properties",$this->connection);
+    
+    $rs_list=new RecordSet();
+    $rs_list->CursorType = adOpenKeyset;
+    $rs_list->MaxRecords=0;
+    $rs_list->Open("select * from import_1c_properties_list",$this->connection);
+    $properties_list=[];
+    foreach ($properties as $prop){
+        $rs->AddNew();
+        $rs->Fields->Item["name"]->Value=$prop->name;
+        $rs->Fields->Item["id1c"]->Value=$prop->id;
+        $rs->Fields->Item["type"]->Value=$prop->type;
+        //смотрим список значений, если есть
+        if ($prop->type=="voc"){
+            foreach ($prop->values as $id1c=>$value){
+                $rs_list->AddNew();
+                $rs_list->Fields->Item["id1c"]->Value=$id1c;
+                $rs_list->Fields->Item["value"]->Value=$value;
+                $rs_list->Fields->Item["import_1c_properties"]->Value=$prop->id;
+                //накаптиваем значений характеристик из списка что бы потом вставить значение в товар
+                $properties_list[$id1c]=$value;
+                $rs_list->Update();
+            }
+        }
+        $rs->Update();
+    }
+    $rs_list->Close();
+    $rs->Close();
+    $rs_list=null;
+    $rs=null;
+    
+    
+
+    /*-------------------------------------------------------------*/
     //частичная / полная загрузка, проверяем на существование узлов
     //храним то что есть в нашей базе
     $exists=[];
@@ -157,7 +201,7 @@ public function Import()
       ["ВидНоменклатуры"] => string(25) "Товар (пр. ТМЦ)"
       ["ТипНоменклатуры"] => string(10) "Товар"
     }
-    ["properties"] => array(0) {
+    ["properties"] => array(0) { ->ЭТО ХАРАКТЕРИСТИКИ
     }
     ["images"] => array(1) {
       [0] => array(2) {
@@ -170,6 +214,7 @@ public function Import()
     }
   }
 }*/
+    /*-------------------------------------------------------------*/
     $a=0;
     $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
@@ -179,13 +224,22 @@ public function Import()
 
     $dir=rtrim($this->config["1c"]["temp1c"],"/")."/";
     $products=$reader->getProducts();
+    /*сам товар*/
     $rs=new RecordSet();
     $rs->CursorType = adOpenKeyset;
     $rs->Open("select * from import_1c_tovar",$this->connection);
     
+    /*файлы к товару*/
     $rsf=new RecordSet();
     $rsf->CursorType = adOpenKeyset;
     $rsf->Open("select * from import_1c_file",$this->connection);
+    
+    /*характеристики товара*/
+    $rsp=new RecordSet();
+    $rsp->CursorType = adOpenKeyset;
+    $rsp->Open("select * from import_1c_tovar_properties",$this->connection);
+    
+    
 
     foreach ($products as $tovar_1c_id=>$item){
         if (!isset($exists[$item->category][0]) || !$item->name){
@@ -197,9 +251,11 @@ public function Import()
             $brends[(string)$item->brend["id"]]=(string)$item->brend["value"];
             $brend_id=(string)$item->brend["id"];
         }
+        
 
         $rs->AddNew();
         $rs->Fields->Item["import_1c_category"]->Value=$exists[$item->category][0];
+        $rs->Fields->Item["category_id1c"]->Value=$item->category;
         $rs->Fields->Item["name"]->Value=$item->name;
         $rs->Fields->Item["category"]->Value=$item->category;
         $rs->Fields->Item["sku"]->Value=$item->sku;
@@ -210,6 +266,22 @@ public function Import()
         $rs->Fields->Item["status"]->Value=$item->status;
         $rs->Update();
         
+        /*смотрим харктеристики и заменяем значения из справочника, если это список значений
+        * обычные строчные значения просто оставляем как есть
+        */
+        foreach ($item->properties as $k=>$prop){
+            $rsp->AddNew();
+            $rsp->Fields->Item["import_1c_tovar"]->Value=$rs->Fields->Item["id"]->Value;
+            $rsp->Fields->Item["1c_tovar_id1c"]->Value=$tovar_1c_id;
+            $rsp->Fields->Item["value"]->Value=$prop;
+            $rsp->Fields->Item["property_id"]->Value=$k;                        //ID характеристики
+            if(array_key_exists( $prop,$properties_list)){
+                $rsp->Fields->Item["property_list_id"]->Value=$prop;            //ID значения характеристики из списка (варианта)
+                $rsp->Fields->Item["value"]->Value=$properties_list[$prop];     //новое значение из справочника списка вариантов
+            }
+            $rsp->Update();
+        }
+
         //сопутствующие файлы
         foreach ($item->images as $images) {
             if (!empty(trim($images["path"]))){

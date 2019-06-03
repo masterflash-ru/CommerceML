@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.41, for FreeBSD11.2 (i386)
+-- MySQL dump 10.13  Distrib 5.6.44, for FreeBSD12.0 (i386)
 --
--- Host: localhost    Database: gaz_krasnodar
+-- Host: localhost    Database: simba4
 -- ------------------------------------------------------
--- Server version	5.6.41
+-- Server version	5.6.44-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -145,6 +145,78 @@ LOCK TABLES `import_1c_price_type` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `import_1c_properties`
+--
+
+DROP TABLE IF EXISTS `import_1c_properties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_properties` (
+  `id1c` char(127) NOT NULL,
+  `name` char(127) DEFAULT NULL COMMENT 'имя характеристики',
+  `type` char(127) DEFAULT NULL COMMENT 'тип',
+  PRIMARY KEY (`id1c`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='справочник характеристик всех';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `import_1c_properties`
+--
+
+LOCK TABLES `import_1c_properties` WRITE;
+/*!40000 ALTER TABLE `import_1c_properties` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_properties` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `import_1c_properties_list`
+--
+
+DROP TABLE IF EXISTS `import_1c_properties_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_properties_list` (
+  `id1c` char(127) NOT NULL,
+  `import_1c_properties` char(127) DEFAULT NULL COMMENT 'ID характеристики, кому принадлежит',
+  `value` char(255) DEFAULT NULL COMMENT 'значение',
+  PRIMARY KEY (`id1c`),
+  KEY `import_1c_properties` (`import_1c_properties`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='варианты значений';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `import_1c_properties_list`
+--
+
+LOCK TABLES `import_1c_properties_list` WRITE;
+/*!40000 ALTER TABLE `import_1c_properties_list` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_properties_list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `import_1c_scheme`
+--
+
+DROP TABLE IF EXISTS `import_1c_scheme`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_scheme` (
+  `parameter` char(255) NOT NULL COMMENT 'имя параметра',
+  `value` char(255) DEFAULT NULL COMMENT 'значение параметра',
+  PRIMARY KEY (`parameter`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='общая информация по схеме';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `import_1c_scheme`
+--
+
+LOCK TABLES `import_1c_scheme` WRITE;
+/*!40000 ALTER TABLE `import_1c_scheme` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_scheme` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `import_1c_sklad`
 --
 
@@ -200,6 +272,7 @@ DROP TABLE IF EXISTS `import_1c_tovar`;
 CREATE TABLE `import_1c_tovar` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `import_1c_category` int(11) DEFAULT NULL COMMENT 'ID категории сайта (число)',
+  `category_id1c` char(127) DEFAULT NULL,
   `import_1c_brend` char(127) DEFAULT NULL COMMENT 'ID 1C производителя',
   `id1c` char(127) DEFAULT NULL,
   `name` char(255) DEFAULT NULL,
@@ -229,27 +302,30 @@ LOCK TABLES `import_1c_tovar` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `import_1c_scheme`
+-- Table structure for table `import_1c_tovar_properties`
 --
 
-DROP TABLE IF EXISTS `import_1c_scheme`;
+DROP TABLE IF EXISTS `import_1c_tovar_properties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_1c_scheme` (
-  `parameter` char(255) NOT NULL COMMENT 'имя параметра',
-  `value` char(255) DEFAULT NULL COMMENT 'значение параметра',
-  PRIMARY KEY (`parameter`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='общая информация по схеме';
+CREATE TABLE `import_1c_tovar_properties` (
+  `import_1c_tovar` int(11) DEFAULT NULL,
+  `1c_tovar_id1c` char(127) DEFAULT NULL,
+  `property_list_id` char(127) DEFAULT NULL COMMENT 'ID значения характристики как в 1С',
+  `property_id` char(127) DEFAULT NULL COMMENT 'ID характеристики',
+  `value` char(255) DEFAULT NULL COMMENT 'значение характеристики'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='характристики товара';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `import_1c_scheme`
+-- Dumping data for table `import_1c_tovar_properties`
 --
 
-LOCK TABLES `import_1c_scheme` WRITE;
-/*!40000 ALTER TABLE `import_1c_scheme` DISABLE KEYS */;
-/*!40000 ALTER TABLE `import_1c_scheme` ENABLE KEYS */;
+LOCK TABLES `import_1c_tovar_properties` WRITE;
+/*!40000 ALTER TABLE `import_1c_tovar_properties` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_tovar_properties` ENABLE KEYS */;
 UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -259,5 +335,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2018-11-02 19:20:36
