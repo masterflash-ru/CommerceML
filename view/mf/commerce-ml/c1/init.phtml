@@ -6,6 +6,10 @@ if ($zip){
 else {
     $zip="zip=no\n";
 }
+
+if (!($limit % 2)) {
+    $limit--;
+}
 //инициализация
 echo $zip;
-echo "file_limit=1000000000\n";
+echo "file_limit={$limit}\n";

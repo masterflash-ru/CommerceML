@@ -9,6 +9,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Exception;
 use ZipArchive;
+use Zend\Session\Container as SessionContainer;
 
 class C1Controller extends AbstractActionController
 {
@@ -47,6 +48,7 @@ public function indexAction()
     $filename=$this->params()->fromQuery('filename',null);    
 	
 	if($mode == "checkauth"){//проверка соединения
+        $session = new SessionContainer("commerceml");
 		$view->setTemplate("mf/commerce-ml/c1/checkauth.phtml");return $view;
 	}
 	
@@ -56,7 +58,8 @@ public function indexAction()
         $path=rtrim($this->config["1c"]["temp1c"],"/");
         if (!is_readable($path)){
             mkdir($path,0777,true);
-        }
+        } 
+        $view->setVariable("limit",$this->get_limit());
         return $view;
 	}
 	if($mode == "import"){
@@ -83,11 +86,12 @@ public function indexAction()
 	if($mode == "file"){
 		//сам обмен, загрузка файлов
 		$view->setTemplate("mf/commerce-ml/c1/file.phtml");
+        $session = new SessionContainer("commerceml");
 		try {
             if (empty($filename)){
                 throw new  Exception("Ошибка обмена, не указано имя файла");
             }
-            $str = file_get_contents('php://input');
+            $str =$this->getRequest()->getContent();
             if (false!==stripos($filename, "import_files") )  {
                 //загрузка файлов, типа картинок
                 $path=dirname($this->tmp.$filename);
@@ -103,9 +107,10 @@ public function indexAction()
 				}
             }
             //запишем переданный файл
-            file_put_contents($this->tmp.$filename,$str);
+            file_put_contents($this->tmp.$filename,$str,FILE_APPEND);
             //проверяем на zip, если да, то сразу разархивируем и удалим исходный архив
-            if (stripos($filename,".zip")>1){
+            //и смотрим все ли получили
+            if (stripos($filename,".zip")>1 && $this->params()->fromHeader('Content-Length')->getFieldValue() !=$this->get_limit()){
                 $zip = new ZipArchive;
                 if ($zip->open($this->tmp.$filename) === true) {
                     $zip->extractTo($this->tmp);
@@ -117,8 +122,7 @@ public function indexAction()
                 }
                 unlink($this->tmp.$filename);
             }
-        }
-		catch (Exception $e){
+        } catch (Exception $e){
 			//любая ошибка 
 			echo "failure\n";
 			echo print_r($e);
@@ -126,6 +130,32 @@ public function indexAction()
 		}
 	}	
     return $view;
+}
+
+    
+    
+    
+    
+protected function str2bytes($value)
+{
+    $unit_byte = preg_replace('/[^a-zA-Z]/', '', $value);
+    $num_val = preg_replace('/[^\d]/', '', $value);
+    switch ($unit_byte) {
+        case 'M':
+            $k = 2;
+            break;
+        default:
+            $k = 1;
+    }
+    return $num_val * pow(1024, $k);
+}
+
+protected function get_limit()
+{
+    $post_max_size = $this->str2bytes(ini_get('post_max_size'));
+    $upload_max_filesize = $this->str2bytes(ini_get('upload_max_filesize'));
+    $memory_limit = $this->str2bytes(ini_get('memory_limit'));
+    return min($post_max_size, $upload_max_filesize, $memory_limit);
 }
 
 }

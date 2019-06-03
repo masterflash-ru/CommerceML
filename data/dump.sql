@@ -81,7 +81,7 @@ CREATE TABLE `import_1c_file` (
   `import_1c_tovar` char(127) NOT NULL COMMENT 'ID товара в терминах 1C',
   `file` varchar(1000) DEFAULT NULL COMMENT 'сам файл+ путь',
   `weight` int(11) DEFAULT NULL,
-  PRIMARY KEY (`import_1c_tovar`)
+  KEY `import_1c_tovar` (`import_1c_tovar`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='файлы к товару';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
