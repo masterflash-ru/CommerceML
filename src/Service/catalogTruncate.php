@@ -36,8 +36,8 @@ public function Import()
     $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_price",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_price_type",$a,adExecuteNoRecords);
-    $this->connection->Execute("truncate import_1c_sklad_type",$a,adExecuteNoRecords);
-    $this->connection->Execute("truncate import_1c_sklad",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_store_type",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_store",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_file",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_scheme",$a,adExecuteNoRecords);
     

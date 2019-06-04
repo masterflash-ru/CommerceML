@@ -43,9 +43,9 @@ public function Import()
     $sklad=$reader->getSkladTypes();
     
     $this->connection->Execute("update import_1c_price_type set flag_change=0",$a,adExecuteNoRecords);
-    $this->connection->Execute("update import_1c_sklad_type set flag_change=0",$a,adExecuteNoRecords);
+    $this->connection->Execute("update import_1c_store_type set flag_change=0",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_price",$a,adExecuteNoRecords);
-    $this->connection->Execute("truncate import_1c_sklad",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_store",$a,adExecuteNoRecords);
     
     //типы прайсов
     $exists=[];
@@ -95,7 +95,7 @@ public function Import()
     $rs=new RecordSet();
     $rs->CursorType = adOpenKeyset;
     $rs->MaxRecords=0;
-    $rs->Open("select * from import_1c_sklad_type",$this->connection);
+    $rs->Open("select * from import_1c_store_type",$this->connection);
     while (!$rs->EOF){
         $exists[$rs->Fields->Item["id1c"]->Value]=[
             $rs->Fields->Item["type"]->Value,
@@ -135,7 +135,7 @@ public function Import()
     $rs=new RecordSet();
     $rs->CursorType = adOpenKeyset;
     $rs->MaxRecords=0;
-    $rs->Open("select * from import_1c_sklad",$this->connection);
+    $rs->Open("select * from import_1c_store",$this->connection);
     $rsm=new RecordSet();
     $rsm->CursorType = adOpenKeyset;
     $rsm->MaxRecords=0;
@@ -148,7 +148,7 @@ public function Import()
         foreach ($item->sklad_quantity as $id=>$sklad_quantity){
             $rs->AddNew();
             $rs->Fields->Item["id1c"]->Value=$tovar_id1c;
-            $rs->Fields->Item["import_1c_sklad_type"]->Value=$id;
+            $rs->Fields->Item["import_1c_store_type"]->Value=$id;
             $rs->Fields->Item["quantity"]->Value=(int)$sklad_quantity;
             $rs->Update();
         }

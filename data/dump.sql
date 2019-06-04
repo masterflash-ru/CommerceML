@@ -217,36 +217,36 @@ LOCK TABLES `import_1c_scheme` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `import_1c_sklad`
+-- Table structure for table `import_1c_store`
 --
 
-DROP TABLE IF EXISTS `import_1c_sklad`;
+DROP TABLE IF EXISTS `import_1c_store`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_1c_sklad` (
+CREATE TABLE `import_1c_store` (
   `id1c` char(127) DEFAULT NULL COMMENT 'ID товара в 1С',
-  `import_1c_sklad_type` char(127) DEFAULT NULL COMMENT 'ID типа склада в 1С',
+  `import_1c_store_type` char(127) DEFAULT NULL COMMENT 'ID типа склада в 1С',
   `quantity` int(11) DEFAULT NULL COMMENT 'остаток'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='остатки на складах';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `import_1c_sklad`
+-- Dumping data for table `import_1c_store`
 --
 
-LOCK TABLES `import_1c_sklad` WRITE;
-/*!40000 ALTER TABLE `import_1c_sklad` DISABLE KEYS */;
-/*!40000 ALTER TABLE `import_1c_sklad` ENABLE KEYS */;
+LOCK TABLES `import_1c_store` WRITE;
+/*!40000 ALTER TABLE `import_1c_store` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `import_1c_sklad_type`
+-- Table structure for table `import_1c_store_type`
 --
 
-DROP TABLE IF EXISTS `import_1c_sklad_type`;
+DROP TABLE IF EXISTS `import_1c_store_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_1c_sklad_type` (
+CREATE TABLE `import_1c_store_type` (
   `id1c` char(127) NOT NULL COMMENT 'ID 1С прайса',
   `type` char(255) DEFAULT NULL COMMENT 'Имя цены',
   `flag_change` int(11) DEFAULT NULL COMMENT '1-новая, 2-изменение'
@@ -254,12 +254,12 @@ CREATE TABLE `import_1c_sklad_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `import_1c_sklad_type`
+-- Dumping data for table `import_1c_store_type`
 --
 
-LOCK TABLES `import_1c_sklad_type` WRITE;
-/*!40000 ALTER TABLE `import_1c_sklad_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `import_1c_sklad_type` ENABLE KEYS */;
+LOCK TABLES `import_1c_store_type` WRITE;
+/*!40000 ALTER TABLE `import_1c_store_type` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_store_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
