@@ -32,7 +32,10 @@ public function Import()
 {
     $a=0;
     $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
-    $this->connection->Execute("truncate import_1c_category",$a,adExecuteNoRecords);
+    if ($this->config["1c"]["enable_truncate_category"]){
+        //разрешено ли очищать структуру категорий?
+        $this->connection->Execute("truncate import_1c_category",$a,adExecuteNoRecords);
+    }
     $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_price",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_price_type",$a,adExecuteNoRecords);

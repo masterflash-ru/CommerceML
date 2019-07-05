@@ -49,5 +49,6 @@ return [
             ],
         "temp1c"=>__DIR__."/../../../../data/1c/",
         "standartParser"=>true,
+        "enable_truncate_category"=>true,
     ],
 ];
