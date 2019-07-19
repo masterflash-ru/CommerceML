@@ -72,12 +72,13 @@ public function indexAction()
         if (false!==stripos($filename, "import")){
             $this->EventManager->trigger("catalogImport",NULL,["filename"=>$this->tmp.$filename]);
             unlink($this->tmp.$filename);
+            $this->EventManager->trigger("catalogImportComplete");
         }
         if (false!==stripos($filename, "offers")){
             $this->EventManager->trigger("catalogOffers",NULL,["filename"=>$this->tmp.$filename]);
             unlink($this->tmp.$filename);
             //вызывается общее событие после завершения загрузки во временные хранилища
-            $this->EventManager->trigger("catalogImportComplete");
+            $this->EventManager->trigger("catalogOffersComplete");
         }
 		return $view;
 	}
