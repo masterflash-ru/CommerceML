@@ -126,7 +126,8 @@ public function Import()
             $rs->Fields->Item["id"]->Value,
             $rs->Fields->Item["subid"]->Value,
             $rs->Fields->Item["level"]->Value,
-            $rs->Fields->Item["name"]->Value
+            $rs->Fields->Item["name"]->Value,
+            $rs->Fields->Item["url"]->Value
         ];
         $rs->MoveNext();
     }
@@ -136,7 +137,7 @@ public function Import()
             //есть измнение!
             $rs->Find("id1c='{$id_1c}'");
             $rs->Fields->Item["name"]->Value=$item->name;
-            $rs->Fields->Item["url"]->Value=$translit($item->name);
+            $rs->Fields->Item["url"]->Value=$exists[$id_1c][4]."-".$translit($item->name);
             $rs->Fields->Item["flag_change"]->Value=2;   //флаг обновления записи
             $rs->Update();
             $exists[$id_1c][3]=$item->name;
@@ -154,14 +155,17 @@ public function Import()
     }
     $root_id_1c="";
     foreach ($categories as $id_1c=>$item){
+        $url="";
         if (!array_key_exists($id_1c,$exists)){
             if (isset($exists[$item->parent][0])){
                 $subid=$exists[$item->parent][0];
+                $url=$exists[$item->parent][4]."-";
             } else {
                 $subid=0;
             }
             if (isset($exists[$item->parent][2])){
                 $level=$exists[$item->parent][2]+1;
+                $url=$exists[$item->parent][4]."-";
             } else {
                 $level=0;
             }
@@ -171,15 +175,17 @@ public function Import()
             $rs->Fields->Item["subid"]->Value=$subid;
             $rs->Fields->Item["level"]->Value=$level;
             $rs->Fields->Item["flag_change"]->Value=1;   //флаг новой записи
-            $rs->Fields->Item["url"]->Value=$translit($item->name);
+            $rs->Fields->Item["url"]->Value=$url.$translit($item->name);
             
             $rs->Update();
             //сохраним как существующий, что бы строить дерево далее
             $exists[$id_1c]=[
-                    $rs->Fields->Item["id"]->Value,
-                    $rs->Fields->Item["subid"]->Value,
-                    $rs->Fields->Item["level"]->Value
-                ];
+                $rs->Fields->Item["id"]->Value,
+                $rs->Fields->Item["subid"]->Value,
+                $rs->Fields->Item["level"]->Value,
+                $rs->Fields->Item["name"]->Value,
+                $rs->Fields->Item["url"]->Value,
+            ];
         }
     }
     $rs->Close();

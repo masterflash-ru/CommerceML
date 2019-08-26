@@ -177,10 +177,9 @@ DROP TABLE IF EXISTS `import_1c_properties_list`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `import_1c_properties_list` (
   `id1c` char(127) NOT NULL,
-  `import_1c_properties` char(127) DEFAULT NULL COMMENT 'ID характеристики, кому принадлежит',
+  `import_1c_properties` char(127) NOT NULL COMMENT 'ID характеристики, кому принадлежит',
   `value` char(255) DEFAULT NULL COMMENT 'значение',
-  PRIMARY KEY (`id1c`),
-  KEY `import_1c_properties` (`import_1c_properties`)
+  PRIMARY KEY (`id1c`,`import_1c_properties`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='варианты значений';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
