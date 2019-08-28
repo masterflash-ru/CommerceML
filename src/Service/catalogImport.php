@@ -137,7 +137,8 @@ public function Import()
             //есть измнение!
             $rs->Find("id1c='{$id_1c}'");
             $rs->Fields->Item["name"]->Value=$item->name;
-            $rs->Fields->Item["url"]->Value=$exists[$id_1c][4]."-".$translit($item->name);
+            //если переименовали, логично сменить и URL, но для индексации это плохо, пока оставим старое значение!
+            //$rs->Fields->Item["url"]->Value=$exists[$id_1c][4]."-".$translit($item->name);
             $rs->Fields->Item["flag_change"]->Value=2;   //флаг обновления записи
             $rs->Update();
             $exists[$id_1c][3]=$item->name;
