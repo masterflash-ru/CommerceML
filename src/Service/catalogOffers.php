@@ -66,6 +66,10 @@ public function Import()
             //есть измнение!
             $rs->Find("id1c='{$id_1c}'");
             $rs->Fields->Item["type"]->Value=$item->type;
+            $rs->Fields->Item["currency"]->Value=$item->currency;
+            $vats=$item->vats;
+            $rs->Fields->Item["vat_name"]->Value=key($vats);
+            $rs->Fields->Item["vat_in"]->Value=(int)$vats[key($vats)]["vat_in"];
             $rs->Fields->Item["flag_change"]->Value=2;   //флаг обновления записи
             $rs->Update();
             $exists[$id_1c][1]=$item->type;
@@ -85,6 +89,9 @@ public function Import()
             $rs->Fields->Item["type"]->Value=$item->type;
             $rs->Fields->Item["id1c"]->Value=$id_1c;
             $rs->Fields->Item["currency"]->Value=$item->currency;
+            $vats=$item->vats;
+            $rs->Fields->Item["vat_name"]->Value=key($vats);
+            $rs->Fields->Item["vat_in"]->Value=(int)$vats[key($vats)]["vat_in"];
             $rs->Fields->Item["flag_change"]->Value=1;   //флаг новой записи
             $rs->Update();
         }

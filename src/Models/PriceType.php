@@ -18,6 +18,9 @@ class PriceType extends Model
      * @var string
      */
     public $currency;
+    
+    /*налоги*/
+    public $vats=[];
 
     /**
      * @param \SimpleXMLElement $xmlPriceType
@@ -38,5 +41,20 @@ class PriceType extends Model
         $this->type = (string)$xmlPriceType->Наименование;
 
         $this->currency = (string)$xmlPriceType->Валюта;
+
+        $name=(string)$xmlPriceType->Налог->Наименование;
+        $vat_in=(string)$xmlPriceType->Налог->УчтеноВСумме;
+        if ($vat_in=="true"){
+            $vat_in=true;
+        } else {
+            $vat_in=false;
+        }
+        $vat_akcis=(string)$xmlPriceType->Налог->Акциз;
+        if ($vat_akcis=="true"){
+            $vat_akcis=true;
+        } else {
+            $vat_akcis=false;
+        }
+        $this->vats[$name]=["vat_in"=>$vat_in,"vat_akcis"=>$vat_akcis];
     }
 }

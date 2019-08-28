@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.44, for FreeBSD12.0 (i386)
+-- MySQL dump 10.13  Distrib 5.6.45, for FreeBSD12.0 (i386)
 --
--- Host: localhost    Database: simba4
+-- Host: localhost    Database: t
 -- ------------------------------------------------------
--- Server version	5.6.44-log
+-- Server version	5.6.45-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -131,6 +131,8 @@ CREATE TABLE `import_1c_price_type` (
   `id1c` char(127) NOT NULL COMMENT 'ID 1С прайса',
   `type` char(255) DEFAULT NULL COMMENT 'Имя цены',
   `currency` char(20) DEFAULT NULL COMMENT 'Валюта',
+  `vat_name` char(50) DEFAULT NULL COMMENT 'имя налога, напр. НДС',
+  `vat_in` tinyint(4) DEFAULT NULL COMMENT 'налог включен в сумму (да/нет-1/0)',
   `flag_change` int(11) DEFAULT NULL COMMENT '1-новая, 2-изменение'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='типы прайсов';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -283,6 +285,7 @@ CREATE TABLE `import_1c_tovar` (
   `requisites_print` text COMMENT 'Наименование для печати',
   `url` char(127) DEFAULT NULL,
   `status` char(100) DEFAULT NULL,
+  `vat` decimal(11,2) DEFAULT NULL COMMENT 'ставка налога',
   PRIMARY KEY (`id`),
   KEY `import_1c_category` (`import_1c_category`),
   KEY `1c` (`id1c`),
@@ -324,7 +327,6 @@ LOCK TABLES `import_1c_tovar_properties` WRITE;
 /*!40000 ALTER TABLE `import_1c_tovar_properties` DISABLE KEYS */;
 /*!40000 ALTER TABLE `import_1c_tovar_properties` ENABLE KEYS */;
 UNLOCK TABLES;
-
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -334,3 +336,5 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-08-28 16:17:19

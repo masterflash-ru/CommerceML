@@ -194,33 +194,43 @@ public function Import()
     //импорт самого товара
    /*
    структура записи товара
-   ["5c44ee6b-dc17-11e8-960e-001c4252ed46"] => object(Mf\CommerceML\Models\Product)#267 (12) {
-    ["id"] => string(36) "5c44ee6b-dc17-11e8-960e-001c4252ed46"
-    ["name"] => string(12) "товар 2"
-    ["sku"] => string(7) "2222222"
+["0e823869-a4ba-11e9-a6c6-ebc9ac19720b"] => object(Mf\CommerceML\Models\Product)#338 (15) {
+    ["id"] => string(36) "0e823869-a4ba-11e9-a6c6-ebc9ac19720b"
+    ["name"] => string(44) "Миниатюрный Шнауцер 3 кг"
+    ["sku"] => string(6) "163030"
     ["unit"] => string(0) ""
-    ["description"] => string(5) " 2"
+    ["description"] => string(0) ""
     ["quantity"] => int(0)
+    ["sklad_quantity"] => array(0) {
+    }
     ["price"] => array(0) {
     }
-    ["category"] => string(36) "5c44ee64-dc17-11e8-960e-001c4252ed46"
-    ["requisites"] => array(2) {
-      ["ВидНоменклатуры"] => string(25) "Товар (пр. ТМЦ)"
+    ["category"] => string(36) "c20f2cc8-db55-11e8-8384-b8ee65eaf58a"
+    ["requisites"] => array(3) {
+      ["ВидНоменклатуры"] => string(21) "Сухие корма"
       ["ТипНоменклатуры"] => string(10) "Товар"
+      ["Полное наименование"] => string(44) "Миниатюрный Шнауцер 3 кг"
     }
-    ["properties"] => array(0) { ->ЭТО ХАРАКТЕРИСТИКИ
+    ["properties"] => array(4) {
+      ["3481a3bb-9cea-11e9-a6c3-e20120b585ab"] => string(36) "b502d19b-db4e-11e8-8384-b8ee65eaf58a"
+      ["3481a3ba-9cea-11e9-a6c3-e20120b585ab"] => string(36) "12840e9e-a008-11e9-a6c4-82902062f9c3"
+      ["3481a3bd-9cea-11e9-a6c3-e20120b585ab"] => string(44) "Миниатюрный Шнауцер 3 кг"
+      ["56ea33d1-9fed-11e9-a6c4-82902062f9c3"] => string(6) "3 000"
     }
     ["images"] => array(1) {
       [0] => array(2) {
-        ["path"] => string(85) "import_files/5c/5c44ee6bdc1711e8960e001c4252ed46_5c44ee6cdc1711e8960e001c4252ed46.jpg"
+        ["path"] => string(85) "import_files/0e/0e823869a4ba11e9a6c6ebc9ac19720b_949decc4a4ba11e9a6c6ebc9ac19720b.jpg"
         ["weight"] => int(0)
       }
     }
-    ["brend"] => array(1) {
-      ["1b2a698c-7e15-11e5-b4e6-8c89a5120b22"] => string(6) "Arcade"
+    ["brend"] => array(0) {
+    }
+    ["status"] => string(0) ""
+    ["vats"] => array(1) {
+      ["НДС"] => float(20)
     }
   }
-}*/
+*/
     /*-------------------------------------------------------------*/
     $a=0;
     $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
@@ -249,6 +259,11 @@ public function Import()
     
 
     foreach ($products as $tovar_1c_id=>$item){
+        if (!empty($item->vats["НДС"])){
+            $vat=$item->vats["НДС"];
+        } else {
+            $vat=0;
+        }
         if (!isset($exists[$item->category][0]) || !$item->name){
             continue;
         }
@@ -271,6 +286,7 @@ public function Import()
         $rs->Fields->Item["url"]->Value=$translit($item->name);
         $rs->Fields->Item["import_1c_brend"]->Value=$brend_id;
         $rs->Fields->Item["status"]->Value=$item->status;
+        $rs->Fields->Item["vat"]->Value=$vat;
         $rs->Update();
         
         /*смотрим харктеристики и заменяем значения из справочника, если это список значений

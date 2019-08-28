@@ -65,6 +65,8 @@ class Product extends Model
     
     public $brend=[];
     public $status=0;
+    /*ставка налога*/
+    public $vats=[];
 
     /**
      * Class constructor.
@@ -151,6 +153,17 @@ class Product extends Model
 
                 if ($value) {
                     $this->properties[$id] = $value;
+                }
+            }
+        }
+        if ($xml->СтавкиНалогов) {
+            foreach ($xml->СтавкиНалогов as $prop) {
+
+                $name = (string)$prop->СтавкаНалога->Наименование;
+                $value = (float)$prop->СтавкаНалога->Ставка;
+
+                if ($value && $name=="НДС") {
+                    $this->vats[$name] = $value;
                 }
             }
         }
