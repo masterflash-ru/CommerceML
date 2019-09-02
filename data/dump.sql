@@ -57,7 +57,8 @@ CREATE TABLE `import_1c_category` (
   PRIMARY KEY (`id`),
   KEY `subid` (`subid`,`level`),
   KEY `name` (`name`),
-  KEY `change` (`flag_change`)
+  KEY `change` (`flag_change`),
+  KEY `id1c` (`id1c`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='категории';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -316,7 +317,10 @@ CREATE TABLE `import_1c_tovar_properties` (
   `1c_tovar_id1c` char(127) DEFAULT NULL,
   `property_list_id` char(127) DEFAULT NULL COMMENT 'ID значения характристики как в 1С',
   `property_id` char(127) DEFAULT NULL COMMENT 'ID характеристики',
-  `value` char(255) DEFAULT NULL COMMENT 'значение характеристики'
+  `value` char(255) DEFAULT NULL COMMENT 'значение характеристики',
+  KEY `import_1c_tovar` (`import_1c_tovar`),
+  KEY `1c_tovar_id1c` (`1c_tovar_id1c`),
+  KEY `property_list_id` (`property_list_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='характристики товара';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -338,4 +342,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-30 11:34:56
+-- Dump completed on 2019-09-02 10:34:01
