@@ -43,6 +43,7 @@ public function Import()
     $this->connection->Execute("truncate import_1c_store",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_file",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_scheme",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_requisites",$a,adExecuteNoRecords);
     
     /*//чистим все файлы и папки во временном хранилище
     $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator($this->config["1c"]["temp1c"],FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);

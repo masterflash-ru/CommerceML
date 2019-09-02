@@ -30,6 +30,18 @@ CREATE TABLE `import_1c_brend` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='производители';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `import_1c_requisites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_requisites` (
+  `import_1c_tovar` char(127) NOT NULL COMMENT 'ID из 1С товара',
+  `name` char(100) NOT NULL COMMENT 'имя параметра',
+  `value` text COMMENT 'значение параметра',
+  PRIMARY KEY (`import_1c_tovar`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='дополнительные реквиз. товара';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Dumping data for table `import_1c_brend`
 --

@@ -236,6 +236,7 @@ public function Import()
     $this->connection->Execute("truncate import_1c_tovar",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_brend",$a,adExecuteNoRecords);
     $this->connection->Execute("truncate import_1c_file",$a,adExecuteNoRecords);
+    $this->connection->Execute("truncate import_1c_requisites",$a,adExecuteNoRecords);
     $brends=[];
     $reader->parseProducts();
 
@@ -256,6 +257,10 @@ public function Import()
     $rsp->CursorType = adOpenKeyset;
     $rsp->Open("select * from import_1c_tovar_properties",$this->connection);
     
+    /*дополнительные реквизиты товара*/
+    $rsr=new RecordSet();
+    $rsr->CursorType = adOpenKeyset;
+    $rsr->Open("select * from import_1c_requisites",$this->connection);
     
 
     foreach ($products as $tovar_1c_id=>$item){
@@ -305,6 +310,15 @@ public function Import()
                 $rsp->Fields->Item["value"]->Value=$properties_list[$prop];     //новое значение из справочника списка вариантов
             }
             $rsp->Update();
+        }
+        
+        //дополнительные реквизиты
+        foreach ($item->requisites as $name=>$requisit){
+            $rsr->AddNew();
+            $rsr->Fields->Item["import_1c_tovar"]->Value=$tovar_1c_id;
+            $rsr->Fields->Item["name"]->Value=$name;
+            $rsr->Fields->Item["value"]->Value=$requisit;
+            $rsr->Update();
         }
 
         //сопутствующие файлы
