@@ -198,7 +198,7 @@ public function Import()
     ["id"] => string(36) "0e823869-a4ba-11e9-a6c6-ebc9ac19720b"
     ["name"] => string(44) "Миниатюрный Шнауцер 3 кг"
     ["sku"] => string(6) "163030"
-    ["unit"] => string(0) ""
+    ["measure"] => string(0) ""
     ["description"] => string(0) ""
     ["quantity"] => int(0)
     ["sklad_quantity"] => array(0) {
@@ -282,6 +282,8 @@ public function Import()
         $rs->Fields->Item["category"]->Value=$item->category;
         $rs->Fields->Item["sku"]->Value=$item->sku;
         $rs->Fields->Item["description"]->Value=$item->description;
+        $rs->Fields->Item["measure"]->Value=$item->measure;
+        $rs->Fields->Item["measure_ratio"]->Value=$item->measure_ratio;
         $rs->Fields->Item["id1c"]->Value=$tovar_1c_id;
         $rs->Fields->Item["url"]->Value=$translit($item->name);
         $rs->Fields->Item["import_1c_brend"]->Value=$brend_id;

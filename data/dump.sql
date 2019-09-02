@@ -278,9 +278,10 @@ CREATE TABLE `import_1c_tovar` (
   `id1c` char(127) DEFAULT NULL,
   `name` char(255) DEFAULT NULL,
   `sku` char(127) DEFAULT NULL,
-  `unit` char(100) DEFAULT NULL COMMENT 'имя бренда как есть',
+  `measure` int(11) DEFAULT NULL COMMENT 'базовая единица (шт.л.)',
+  `measure_ratio` int(11) DEFAULT NULL COMMENT 'коэффициент ед. измерерия',
   `description` text,
-  `quantity` int(11) DEFAULT NULL COMMENT 'остаток',
+  `quantity` int(11) DEFAULT NULL COMMENT 'остаток общий',
   `category` char(127) DEFAULT NULL,
   `requisites_print` text COMMENT 'Наименование для печати',
   `url` char(127) DEFAULT NULL,
@@ -337,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-28 16:17:19
+-- Dump completed on 2019-08-30 11:34:56

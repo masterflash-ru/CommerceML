@@ -22,9 +22,12 @@ class Product extends Model
     public $sku;
 
     /**
-     * @var string $unit
+     * @var string $measure
      */
-    public $unit;
+    public $measure;
+    
+    //коэффициент измерения
+    public $measure_ratio=1;
 
     /**
      * @var string $description
@@ -67,6 +70,7 @@ class Product extends Model
     public $status=0;
     /*ставка налога*/
     public $vats=[];
+    
 
     /**
      * Class constructor.
@@ -109,8 +113,8 @@ class Product extends Model
         $this->description = trim($xml->Описание);
 
         $this->sku = trim($xml->Артикул);
-        $this->unit = trim($xml->БазоваяЕдиница);
-
+        $this->measure = (int)$xml->БазоваяЕдиница->Пересчет->Единица;
+        $this->measure_ratio = (int)$xml->БазоваяЕдиница->Пересчет->Коэффициент;
         if (!$xml->Группы) {
             //throw new CommerceMLException("The product has no category: {$this->id}");
         }
