@@ -3,3 +3,5 @@
 echo "success\n";
 echo session_name()."\n";
 echo session_id() ."\n";
+echo "sessid=" . md5("123".session_id()). "\n";
+echo "timestamp=".time()."\n";

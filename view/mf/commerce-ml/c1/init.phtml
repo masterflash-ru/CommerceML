@@ -1,15 +1,7 @@
 <?php
-$zip=class_exists("ZipArchive");
-if ($zip){
-    $zip="zip=yes\n";
-}
-else {
-    $zip="zip=no\n";
-}
-
 if (!($limit % 2)) {
     $limit--;
 }
 //инициализация
-echo $zip;
+echo $zip."\n";
 echo "file_limit={$limit}\n";
