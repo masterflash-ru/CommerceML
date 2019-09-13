@@ -60,7 +60,7 @@ public function Import()
     $this->connection->Execute("truncate import_1c_tovar_properties",$a,adExecuteNoRecords);
     
     $rss=new RecordSet();
-    $rss->CursorType = adOpenKeyset;
+    $rss->CursorType = adOpenStatic;
     $rss->MaxRecords=0;
     $rss->Open("select * from import_1c_scheme",$this->connection);
 
@@ -78,12 +78,12 @@ public function Import()
     /*-------------------------------------------------------------*/
     //обрабатываем характеристики товара, справочник указан в начале 
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_properties",$this->connection);
     
     $rs_list=new RecordSet();
-    $rs_list->CursorType = adOpenKeyset;
+    $rs_list->CursorType = adOpenStatic;
     $rs_list->MaxRecords=0;
     $rs_list->Open("select * from import_1c_properties_list",$this->connection);
     $properties_list=[];
@@ -101,11 +101,13 @@ public function Import()
                 $rs_list->Fields->Item["import_1c_properties"]->Value=$prop->id;
                 //накаптиваем значений характеристик из списка что бы потом вставить значение в товар
                 $properties_list[$id1c]=$value;
-                $rs_list->Update();
+                //$rs_list->Update();
             }
         }
-        $rs->Update();
+        //$rs->Update();
     }
+    $rs->UpdateBatch(adAffectAllChapters,false,true);
+    $rs_list->UpdateBatch(adAffectAllChapters,false,true);
     $rs_list->Close();
     $rs->Close();
     $rs_list=null;
@@ -118,7 +120,7 @@ public function Import()
     //храним то что есть в нашей базе
     $exists=[];
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_category",$this->connection);
     while (!$rs->EOF){
@@ -244,22 +246,22 @@ public function Import()
     $products=$reader->getProducts();
     /*сам товар*/
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->Open("select * from import_1c_tovar",$this->connection);
     
     /*файлы к товару*/
     $rsf=new RecordSet();
-    $rsf->CursorType = adOpenKeyset;
+    $rsf->CursorType = adOpenStatic;
     $rsf->Open("select * from import_1c_file",$this->connection);
     
     /*характеристики товара*/
     $rsp=new RecordSet();
-    $rsp->CursorType = adOpenKeyset;
+    $rsp->CursorType = adOpenStatic;
     $rsp->Open("select * from import_1c_tovar_properties",$this->connection);
     
     /*дополнительные реквизиты товара*/
     $rsr=new RecordSet();
-    $rsr->CursorType = adOpenKeyset;
+    $rsr->CursorType = adOpenStatic;
     $rsr->Open("select * from import_1c_requisites",$this->connection);
     
 
@@ -294,14 +296,14 @@ public function Import()
         $rs->Fields->Item["import_1c_brend"]->Value=$brend_id;
         $rs->Fields->Item["status"]->Value=$item->status;
         $rs->Fields->Item["vat"]->Value=$vat;
-        $rs->Update();
+        //$rs->Update();
         
         /*смотрим харктеристики и заменяем значения из справочника, если это список значений
         * обычные строчные значения просто оставляем как есть
         */
         foreach ($item->properties as $k=>$prop){
             $rsp->AddNew();
-            $rsp->Fields->Item["import_1c_tovar"]->Value=$rs->Fields->Item["id"]->Value;
+            //$rsp->Fields->Item["import_1c_tovar"]->Value=$rs->Fields->Item["id"]->Value;
             $rsp->Fields->Item["1c_tovar_id1c"]->Value=$tovar_1c_id;
             $rsp->Fields->Item["value"]->Value=$prop;
             $rsp->Fields->Item["property_id"]->Value=$k;                        //ID характеристики
@@ -309,8 +311,9 @@ public function Import()
                 $rsp->Fields->Item["property_list_id"]->Value=$prop;            //ID значения характеристики из списка (варианта)
                 $rsp->Fields->Item["value"]->Value=$properties_list[$prop];     //новое значение из справочника списка вариантов
             }
-            $rsp->Update();
+            //$rsp->Update();
         }
+        //$rsp->UpdateBatch(adAffectAllChapters,false,true);
         
         //дополнительные реквизиты
         foreach ($item->requisites as $name=>$requisit){
@@ -318,8 +321,9 @@ public function Import()
             $rsr->Fields->Item["import_1c_tovar"]->Value=$tovar_1c_id;
             $rsr->Fields->Item["name"]->Value=$name;
             $rsr->Fields->Item["value"]->Value=$requisit;
-            $rsr->Update();
+            //$rsr->Update();
         }
+        //$rsr->UpdateBatch(adAffectAllChapters,false,true);
 
         //сопутствующие файлы
         foreach ($item->images as $images) {
@@ -328,22 +332,28 @@ public function Import()
             $rsf->Fields->Item["file"]->Value=$dir.$images["path"];
             $rsf->Fields->Item["weight"]->Value=$images["weight"];
             $rsf->Fields->Item["import_1c_tovar"]->Value=$tovar_1c_id; //id товара в терминах 1С
-            $rsf->Update();
+            //$rsf->Update();
             }
         }
+        //$rsf->UpdateBatch(adAffectAllChapters,false,true);
         
     }
+    $rs->UpdateBatch(adAffectAllChapters,false,true);
+    $rsf->UpdateBatch(adAffectAllChapters,false,true);
+    $rsp->UpdateBatch(adAffectAllChapters,false,true);
+    $rsr->UpdateBatch(adAffectAllChapters,false,true);
     //добавляем бренды, ечли есть
     $rsb=new RecordSet();
-    $rsb->CursorType = adOpenKeyset;
+    $rsb->CursorType = adOpenStatic;
     $rsb->Open("select * from import_1c_brend",$this->connection);
     foreach ($brends as $id=>$name){
         $rsb->AddNew();
         $rsb->Fields->Item["id1c"]->Value=$id;
         $rsb->Fields->Item["name"]->Value=$name;
         $rsb->Fields->Item["url"]->Value=$translit($name);
-        $rsb->Update();
+        //$rsb->Update();
     }
+    $rsb->UpdateBatch(adAffectAllChapters,false,true);
 }
 	
 }

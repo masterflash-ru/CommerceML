@@ -50,7 +50,7 @@ public function Import()
     //типы прайсов
     $exists=[];
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_price_type",$this->connection);
     while (!$rs->EOF){
@@ -100,7 +100,7 @@ public function Import()
     //типы склада
     $exists=[];
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_store_type",$this->connection);
     while (!$rs->EOF){
@@ -140,11 +140,11 @@ public function Import()
 
     //добавление в каталог продукции цен и остатков
     $rs=new RecordSet();
-    $rs->CursorType = adOpenKeyset;
+    $rs->CursorType = adOpenStatic;
     $rs->MaxRecords=0;
     $rs->Open("select * from import_1c_store",$this->connection);
     $rsm=new RecordSet();
-    $rsm->CursorType = adOpenKeyset;
+    $rsm->CursorType = adOpenStatic;
     $rsm->MaxRecords=0;
     $rsm->Open("select * from import_1c_price",$this->connection);
 
@@ -157,8 +157,9 @@ public function Import()
             $rs->Fields->Item["id1c"]->Value=$tovar_id1c;
             $rs->Fields->Item["import_1c_store_type"]->Value=$id;
             $rs->Fields->Item["quantity"]->Value=(int)$sklad_quantity;
-            $rs->Update();
+            //$rs->Update();
         }
+       
         //все виды цен для каждого из товара
         foreach ($item->price as $id=>$price){
             $rsm->AddNew();
@@ -166,9 +167,11 @@ public function Import()
             $rsm->Fields->Item["import_1c_price_type"]->Value=$id;
             $rsm->Fields->Item["currency"]->Value=$price["currency"];
             $rsm->Fields->Item["price"]->Value=$price["value"];
-            $rsm->Update();
+            //$rsm->Update();
         }
     }
+     $rs->UpdateBatch(adAffectAllChapters,false,true);
+     $rsm->UpdateBatch(adAffectAllChapters,false,true);
 }
 	
 }

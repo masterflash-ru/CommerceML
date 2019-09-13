@@ -30,18 +30,6 @@ CREATE TABLE `import_1c_brend` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='производители';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-DROP TABLE IF EXISTS `import_1c_requisites`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_1c_requisites` (
-  `import_1c_tovar` char(127) NOT NULL COMMENT 'ID из 1С товара',
-  `name` char(100) NOT NULL COMMENT 'имя параметра',
-  `value` text COMMENT 'значение параметра',
-  PRIMARY KEY (`import_1c_tovar`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='дополнительные реквиз. товара';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
 --
 -- Dumping data for table `import_1c_brend`
 --
@@ -208,6 +196,30 @@ LOCK TABLES `import_1c_properties_list` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `import_1c_requisites`
+--
+
+DROP TABLE IF EXISTS `import_1c_requisites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_1c_requisites` (
+  `import_1c_tovar` char(127) NOT NULL COMMENT 'ID из 1С товара',
+  `name` char(100) NOT NULL COMMENT 'имя параметра',
+  `value` text COMMENT 'значение параметра',
+  PRIMARY KEY (`import_1c_tovar`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='дополнительные реквиз. товара';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `import_1c_requisites`
+--
+
+LOCK TABLES `import_1c_requisites` WRITE;
+/*!40000 ALTER TABLE `import_1c_requisites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `import_1c_requisites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `import_1c_scheme`
 --
 
@@ -325,12 +337,10 @@ DROP TABLE IF EXISTS `import_1c_tovar_properties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `import_1c_tovar_properties` (
-  `import_1c_tovar` int(11) DEFAULT NULL,
   `1c_tovar_id1c` char(127) DEFAULT NULL,
   `property_list_id` char(127) DEFAULT NULL COMMENT 'ID значения характристики как в 1С',
   `property_id` char(127) DEFAULT NULL COMMENT 'ID характеристики',
   `value` char(255) DEFAULT NULL COMMENT 'значение характеристики',
-  KEY `import_1c_tovar` (`import_1c_tovar`),
   KEY `1c_tovar_id1c` (`1c_tovar_id1c`),
   KEY `property_list_id` (`property_list_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='характристики товара';
@@ -354,4 +364,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-02 10:34:01
+-- Dump completed on 2019-09-13 10:02:34
