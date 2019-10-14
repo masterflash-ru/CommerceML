@@ -62,4 +62,46 @@ composer require masterflash-ru/commerceml
 * import_1c_tovar_properties - характристики товара, если тип хар-ки это список, привязка с списку
 * import_1c_requisites - Дополнительные реквизиты товара, хранит имя параметра=>значение параметра
 
-
+Для работы с базой в конфиге приложения должно быть объявлено DefaultSystemDb:
+```php
+......
+    "databases"=>[
+        //соединение с базой + имя драйвера
+        'DefaultSystemDb' => [
+            'driver'=>'MysqlPdo',
+            //"unix_socket"=>"/tmp/mysql.sock",
+            "host"=>"localhost",
+            'login'=>"root",
+            "password"=>"**********",
+            "database"=>"simba4",
+            "locale"=>"ru_RU",
+            "character"=>"utf8"
+        ],
+    ],
+.....
+```
+для работы с кешем аналогично:
+```php
+.....
+    'caches' => [
+        'DefaultSystemCache' => [
+            'adapter' => [
+                'name'    => Filesystem::class,
+                'options' => [
+                    // Store cached data in this directory.
+                    'cache_dir' => './data/cache',
+                    // Store cached data for 3 hour.
+                    'ttl' => 60*60*2 
+                ],
+            ],
+            'plugins' => [
+                [
+                    'name' => Serializer::class,
+                    'options' => [
+                    ],
+                ],
+            ],
+        ],
+    ],
+.....
+```
