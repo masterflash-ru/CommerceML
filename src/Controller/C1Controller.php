@@ -10,6 +10,9 @@ use Zend\View\Model\ViewModel;
 use Exception;
 use ZipArchive;
 use Zend\Session\Container as SessionContainer;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use FilesystemIterator;
 
 class C1Controller extends AbstractActionController
 {
@@ -71,7 +74,24 @@ class C1Controller extends AbstractActionController
                 $zip="zip=no";
             }
             $view->setVariables(["limit"=>$this->get_limit(),"zip"=>$zip]);
-
+            
+            if (!is_readable($path."/flag_clear.txt")){
+                //это флаг очистки временного каталога, через 12 часов если будет новый обмен
+                file_put_contents($path."/flag_clear.txt",time());
+            } else {
+                $clear=(int)file_get_contents($path."/flag_clear.txt");
+                if ($clear +$this->config["1c"]["clear_after_sec"] < time() ){
+                    //чистим все файлы и папки во временном хранилище
+                    $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator($this->config["1c"]["temp1c"],FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
+                    foreach ($iterator as $path) {
+                        if ($path->isDir()) {
+                            @rmdir((string)$path);
+                        } else {
+                            @unlink((string)$path);
+                        }
+                    }
+                }
+            }
             return $view;
         }
 

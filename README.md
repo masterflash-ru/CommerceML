@@ -45,6 +45,7 @@ composer require masterflash-ru/commerceml
             ],
         "temp1c"=>__DIR__."/../../../../data/1c/",
         "standartParser"=>true,
+        "clear_after_sec"=>43200,      //время в секундах, когда можно очистить временный каталог
     ],
 ```
 Таблицы:
