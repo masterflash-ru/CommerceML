@@ -43,6 +43,10 @@ return [
 
     
     "1c"=>[
+        "config"=>[
+            "database"  =>  "DefaultSystemDb",
+            "cache"     =>  "DefaultSystemCache",
+        ],
         //логин/пароль для базовой аутентификации 1С
         "login"=>[
             "admin"=>"vfibyf",
