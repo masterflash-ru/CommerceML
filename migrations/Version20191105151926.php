@@ -9,7 +9,7 @@ class Version20191105151926 extends AbstractMigration implements MigrationInterf
 {
     public static $description = "Migration description";
 
-    public function up($schema)
+    public function up($schema, $adapter)
     {
         switch ($this->db_type){
             case "mysql":{
@@ -128,7 +128,7 @@ class Version20191105151926 extends AbstractMigration implements MigrationInterf
         }
     }
 
-    public function down($schema)
+    public function down($schema, $adapter)
     {
         switch ($this->db_type){
             case "mysql":{
