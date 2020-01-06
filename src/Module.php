@@ -2,8 +2,8 @@
 
 namespace Mf\CommerceML;
 
-use Zend\Mvc\MvcEvent;
-use Zend\EventManager\Event;
+use Laminas\Mvc\MvcEvent;
+use Laminas\EventManager\Event;
 use Mf\CommerceML\Service\catalogImport;
 use Mf\CommerceML\Service\catalogOffers;
 use Mf\CommerceML\Service\catalogTruncate;

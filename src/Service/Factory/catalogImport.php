@@ -2,7 +2,7 @@
 namespace Mf\CommerceML\Service\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\EventManager\EventManager;
+use Laminas\EventManager\EventManager;
 /*
 Фабрика 
 */

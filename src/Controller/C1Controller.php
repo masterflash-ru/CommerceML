@@ -5,11 +5,11 @@
 
 namespace Mf\CommerceML\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 use Exception;
 use ZipArchive;
-use Zend\Session\Container as SessionContainer;
+use Laminas\Session\Container as SessionContainer;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FilesystemIterator;

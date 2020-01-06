@@ -2,8 +2,8 @@
 namespace Mf\CommerceML\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\EventManager\EventManager;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\EventManager\EventManager;
 
 
 /**

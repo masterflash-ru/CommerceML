@@ -12,9 +12,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.0",
+        "php": "^7.2",
         "masterflash-ru/ado": "^2.0",
-        "zendframework/zend-mvc": "^3.0.1"
+        "laminas/laminas-mvc": "^3.0.1"
     },
     "autoload": {
         "psr-4": {
