@@ -4,7 +4,7 @@
 
 namespace Mf\CommerceML;
 
-use Laminas\ Router\ Http\ Literal;
+use Laminas\Router\Http\Literal;
 
 
 return [
